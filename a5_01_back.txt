@@ -1,0 +1,26 @@
+def knapsack_backtracking(values, weights, capacity):
+    n = len(values)
+    def backtrack(i, current_weight, current_value, selected_items, max_value, max_items):
+        if i == n:
+            if current_value > max_value[0]:
+                max_value[0] = current_value
+                max_items.clear()
+                max_items.extend(selected_items)
+            return 
+        if current_weight + weights[i] <= capacity:
+            selected_items.append(i)
+            backtrack(i + 1, current_weight + weights[i],current_value + values[i],selected_items,max_value, max_items)
+            selected_items.pop()
+            backtrack(i + 1, current_weight, current_value, selected_items, max_value, max_items)
+    selected_items = [] 
+    max_value = [0]
+    max_items = []
+    backtrack(0, 0, 0, selected_items, max_value, max_items)
+    return max_value[0], max_items
+values = [60, 100, 120]
+weights = [10, 20, 30]
+capacity = 50
+result, selected_items = knapsack_backtracking(values, weights, capacity)
+print("Results for Backtracking:")
+print("Maximum value:", result)
+print("Selected items:", selected_items)

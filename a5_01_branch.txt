@@ -1,0 +1,48 @@
+class Item:
+    def __init__(self, value, weight):
+        self.value = value
+        self.weight = weight
+        self.value_per_weight = value / weight
+def knapsack_branch_and_bound(values, weights, capacity):
+    n = len(values)
+    items = [Item(values[i], weights[i]) for i in range(n)]
+    items.sort(key=lambda x: x.value_per_weight, reverse=True)
+    def bound(i, current_weight, current_value):
+        bound_value = current_value
+        total_weight = current_weight
+        while i < n and total_weight + items[i].weight <= capacity:
+            total_weight += items[i].weight
+            bound_value += items[i].value
+            i += 1
+        if i < n:
+            bound_value += (capacity - total_weight) * items[i].value_per_weight
+        return bound_value
+    def branch_and_bound(i, current_weight, current_value, selected_items):
+        nonlocal max_value, best_selection
+        if current_weight > capacity:
+            return
+        if i == n:
+            if current_value > max_value:
+                max_value = current_value
+                best_selection = selected_items[:]
+            return
+        if bound(i, current_weight, current_value) <= max_value:
+            return
+        branch_and_bound(i + 1, current_weight, current_value, selected_items)
+        selected_items.append(i)
+        branch_and_bound(i + 1, current_weight + items[i].weight, current_value + items[i].value, selected_items)
+        selected_items.pop()
+
+    max_value = 0
+    best_selection = []
+    branch_and_bound(0, 0, 0, [])
+    return max_value, best_selection
+
+values = [60, 100, 120]
+weights = [10, 20, 30]
+capacity = 50
+
+result, selected_items = knapsack_branch_and_bound(values, weights, capacity)
+print("Results for Branch and Bound:")
+print("Maximum value:", result)
+print("Selected items:", selected_items)

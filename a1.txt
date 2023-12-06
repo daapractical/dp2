@@ -1,0 +1,33 @@
+import random
+
+def binary_search(arr, key):
+    left, right = 0, len(arr) - 1
+
+    while left <= right:
+        mid = left + (right - left) // 2
+
+        if arr[mid] == key:
+            return mid
+
+        if arr[mid] < key:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
+
+array_size = 5000
+arr = [random.randint(0, 9999) for _ in range(array_size)]
+arr.sort()
+
+print("Generated Array:")
+print(arr)
+
+key = int(input("\nEnter the key element to search for: "))
+
+result = binary_search(arr, key)
+if result != -1:
+    print(f"Element {key} found at index {result}")
+else:
+    print(f"Element {key} not found in the array.")
+

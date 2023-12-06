@@ -1,0 +1,22 @@
+import random
+import time
+
+sz = int(input("Enter the size of array: "))
+rand_array = [random.randint(0, 9999) for _ in range(sz)]
+arr = rand_array.copy()
+print("The generated array:")
+print(rand_array)
+
+start_time = time.time()
+for x in range(sz):
+    for y in range(x, sz - 1):
+        if arr[x] > arr[y + 1]:
+            temp = arr[x]
+            arr[x] = arr[y + 1]
+            arr[y + 1] = temp
+            
+print("\nElements sorted in ascending order using Quick Sort:")
+print(arr)
+end_time = time.time()
+elapsed_time = end_time - start_time
+print(f"The sorting time is: {elapsed_time:.6f} seconds.")
